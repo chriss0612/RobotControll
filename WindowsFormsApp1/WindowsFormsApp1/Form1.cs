@@ -12,8 +12,11 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        private int posx = 32;
-        private int posy = 32;
+        bool up = false;
+        bool down = false;
+        bool left = false;
+        bool right = false;
+
         private bool posChanged = false;
         public Form1()
         {
@@ -36,31 +39,76 @@ namespace WindowsFormsApp1
                 MessageBox.Show(E.Message);
             }
         }
-
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        private void Drive(bool LRPress, bool LR, bool FBPress, bool FB)
         {
-            posx = e.X;
-            posy = e.Y;
-            posChanged=true;
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            try
+            if(LRPress)
             {
-                if(posChanged)
+                if(FBPress)
                 {
-                    sendData(true, (byte)(posx * 64 / ClientSize.Width));
-                    sendData(false, (byte)(posy * 64 / ClientSize.Height));
-                    posChanged = false;
+                    if(FB)
+                    {
+                        if(LR)
+                        {
+                            SendData(true, 32 - speedBar.Value / 2);       //Forward Left
+                            SendData(false, 32 + speedBar.Value);
+                        }
+                        else
+                        {
+                            SendData(true, 32 - speedBar.Value);       //Forward Right
+                            SendData(false, 32 + speedBar.Value / 2);
+                        }
+                    }
+                    else
+                    {
+                        if (LR)
+                        {
+                            SendData(true, 32 + speedBar.Value / 2);       //Backward Left
+                            SendData(false, 32 - speedBar.Value);
+                        }
+                        else
+                        {
+                            SendData(true, 32 + speedBar.Value);       //Backward Right
+                            SendData(false, 32 - speedBar.Value / 2);
+                        }
+                    }
+                }
+                else
+                {
+                    if(LR)
+                    {
+                        SendData(true, 32 + speedBar.Value);           //Turn Left
+                        SendData(false, 32 + speedBar.Value);
+                    }
+                    else
+                    {
+                        SendData(true, 32 - speedBar.Value);           //Turn Right
+                        SendData(false, 32 - speedBar.Value);
+                    }
                 }
             }
-            catch(DivideByZeroException)
+            else
             {
-                
+                if(FBPress)
+                {
+                    if(FB)
+                    {
+                        SendData(true, 32 - speedBar.Value);       //Forward Straight
+                        SendData(false, 32 + speedBar.Value);
+                    }
+                    else
+                    {
+                        SendData(true, 32 + speedBar.Value);       //Backward Straight
+                        SendData(false, 32 - speedBar.Value);
+                    }
+                }
+                else
+                {
+                    SendData(true, 32);         //Stop
+                    SendData(false, 32);
+                }
             }
         }
-        private void sendData(bool dir, int pos)
+        private void SendData(bool dir, int pos)
         {
             if(dir)
             {
@@ -68,8 +116,7 @@ namespace WindowsFormsApp1
                 byte[] b = new byte[1];
                 b[0] = 0x80;                // 1000 0000
                 b[0] |= (byte)(0x3F & pos);
-                labelOutR.Text = "R: " + pos;
-                //port.Write(b, 0, 1);
+                port.Write(b, 0, 1);
             }
             else
             {
@@ -77,9 +124,54 @@ namespace WindowsFormsApp1
                 byte[] b = new byte[1];
                 b[0] = 0x40;                // 0100 0000
                 b[0] |= (byte)(0x3F & pos);
-                labelOutL.Text = "L: " + pos;
-                //port.Write(b, 0, 1);
+                port.Write(b, 0, 1);
             }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.W)
+            {
+                down = false;
+                up = true;
+            }
+            else if(e.KeyCode == Keys.S)
+            {
+                up = false;
+                down = true;
+            }
+            else if(e.KeyCode == Keys.A)
+            {
+                right = false;
+                left = true;
+            }
+            else if(e.KeyCode == Keys.D)
+            {
+                left = false;
+                right = true;
+            }
+            Drive(left || right, left, up || down, up);
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.W)
+            {
+                up = false;
+            }
+            else if (e.KeyCode == Keys.S)
+            {
+                down = false;
+            }
+            else if (e.KeyCode == Keys.A)
+            {
+                left = false;
+            }
+            else if (e.KeyCode == Keys.D)
+            {
+                right = false;
+            }
+            Drive(left || right, left, up || down, up);
         }
     }
 }
