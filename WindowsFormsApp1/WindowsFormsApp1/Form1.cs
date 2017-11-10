@@ -25,7 +25,7 @@ namespace WindowsFormsApp1
 
         private void port_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            label1.Text = "ADC: " + ((SerialPort) sender).ReadExisting();
+            label1.Text = "ADC: Test " + Convert.ToInt16(((SerialPort) sender).ReadExisting().ToCharArray()[0]);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -49,26 +49,26 @@ namespace WindowsFormsApp1
                     {
                         if(LR)
                         {
-                            SendData(true, 32 - speedBar.Value / 2);       //Forward Left
+                            SendData(true, 32 - speedBar.Value / 3);       //Forward Left
                             SendData(false, 32 + speedBar.Value);
                         }
                         else
                         {
                             SendData(true, 32 - speedBar.Value);       //Forward Right
-                            SendData(false, 32 + speedBar.Value / 2);
+                            SendData(false, 32 + speedBar.Value / 3);
                         }
                     }
                     else
                     {
                         if (LR)
                         {
-                            SendData(true, 32 + speedBar.Value / 2);       //Backward Left
+                            SendData(true, 32 + speedBar.Value / 3);       //Backward Left
                             SendData(false, 32 - speedBar.Value);
                         }
                         else
                         {
                             SendData(true, 32 + speedBar.Value);       //Backward Right
-                            SendData(false, 32 - speedBar.Value / 2);
+                            SendData(false, 32 - speedBar.Value / 3);
                         }
                     }
                 }
@@ -173,5 +173,35 @@ namespace WindowsFormsApp1
             }
             Drive(left || right, left, up || down, up);
         }
+
+        private void speedBar_Scroll(object sender, EventArgs e)
+        {
+            Drive(left || right, left, up || down, up);
+        }
+
+        private void cBBL_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateBlinker();
+        }
+        private void cBHUPE_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateBlinker();
+        }
+
+        private void cBBR_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateBlinker();
+        }
+
+        private void UpdateBlinker()
+        {
+            byte[] b = new byte[1];
+            b[0] = 0xC0;                // 1100 0000
+            if (cBBR.Checked) b[0] |= 0x01;
+            if (cBBL.Checked) b[0] |= 0x02;
+            if (cBHUPE.Checked) b[0] |= 0x04;
+            port.Write(b, 0, 1);
+        }
+
     }
 }
