@@ -7,17 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO.Ports;
 
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        bool up = false;
-        bool down = false;
-        bool left = false;
-        bool right = false;
-
-        private bool posChanged = false;
+        public bool up = false;
+        public bool down = false;
+        public bool left = false;
+        public bool right = false;
+        
         public Form1()
         {
             InitializeComponent();
@@ -25,7 +25,7 @@ namespace WindowsFormsApp1
 
         private void port_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            //TODO
+            label1.Text = "ADC: " + ((SerialPort) sender).ReadExisting();
         }
 
         private void Form1_Load(object sender, EventArgs e)
