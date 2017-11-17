@@ -17,7 +17,7 @@ namespace WindowsFormsApp1
         public bool down = false;
         public bool left = false;
         public bool right = false;
-        
+        private int adc_Value = 0;
         public Form1()
         {
             InitializeComponent();
@@ -25,7 +25,9 @@ namespace WindowsFormsApp1
 
         private void port_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            label1.Text = "ADC: Test " + Convert.ToInt16(((SerialPort) sender).ReadExisting().ToCharArray()[0]);
+            //MessageBox.Show("ADC: " + Convert.ToInt16(((SerialPort)sender).ReadExisting().ToCharArray()[0]));
+            //label1.Text = "ADC: " + Convert.ToInt16(((SerialPort) sender).ReadExisting().ToCharArray()[0]);
+            adc_Value = ((SerialPort)sender).ReadExisting().ToCharArray()[0];
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -110,6 +112,7 @@ namespace WindowsFormsApp1
                     SendData(false, 32);
                 }
             }
+            label1.Text = "ADC: " + adc_Value;
         }
         private void SendData(bool dir, int pos)
         {

@@ -41,6 +41,7 @@
             // port
             // 
             this.port.PortName = "COM4";
+            this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.port_DataReceived);
             // 
             // speedBar
             // 
@@ -60,9 +61,8 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(147, 48);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.Size = new System.Drawing.Size(0, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "ADC:  ";
             // 
             // cBBL
             // 
