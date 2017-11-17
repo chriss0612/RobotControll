@@ -32,11 +32,14 @@ namespace WindowsFormsApp1
         {
             try
             {
+                string input = Microsoft.VisualBasic.Interaction.InputBox("Serial Port?", "Choose a Serial Port", "COM4", -1, -1);
+                //port.PortName = "COM4";
                 port.Open();
             }
             catch (Exception E)
             {
                 MessageBox.Show(E.Message);
+                Application.Exit();
             }
         }
         private void Drive(bool LRPress, bool LR, bool FBPress, bool FB)

@@ -40,7 +40,7 @@
             // 
             // port
             // 
-            this.port.PortName = "COM6";
+            this.port.PortName = "COM4";
             // 
             // speedBar
             // 

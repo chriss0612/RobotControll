@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{ECA24A9F-EEE7-4F72-9194-5AB68D946B6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotControll", "WindowsFormsApp1\RobotControll.csproj", "{ECA24A9F-EEE7-4F72-9194-5AB68D946B6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
