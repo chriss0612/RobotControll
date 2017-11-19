@@ -17,25 +17,18 @@ namespace WindowsFormsApp1
         public bool down = false;
         public bool left = false;
         public bool right = false;
-        private int adc_Value = 0;
         public Form1()
         {
             InitializeComponent();
         }
-
-        private void port_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
-        {
-            //MessageBox.Show("ADC: " + Convert.ToInt16(((SerialPort)sender).ReadExisting().ToCharArray()[0]));
-            //label1.Text = "ADC: " + Convert.ToInt16(((SerialPort) sender).ReadExisting().ToCharArray()[0]);
-            adc_Value = ((SerialPort)sender).ReadExisting().ToCharArray()[0];
-        }
+        
 
         private void Form1_Load(object sender, EventArgs e)
         {
             try
             {
                 string input = Microsoft.VisualBasic.Interaction.InputBox("Serial Port?", "Choose a Serial Port", "COM4", -1, -1);
-                //port.PortName = "COM4";
+                port.PortName = input;
                 port.Open();
             }
             catch (Exception E)
@@ -46,13 +39,13 @@ namespace WindowsFormsApp1
         }
         private void Drive(bool LRPress, bool LR, bool FBPress, bool FB)
         {
-            if(LRPress)
+            if (LRPress)
             {
-                if(FBPress)
+                if (FBPress)
                 {
-                    if(FB)
+                    if (FB)
                     {
-                        if(LR)
+                        if (LR)
                         {
                             SendData(true, 32 - speedBar.Value / 3);       //Forward Left
                             SendData(false, 32 + speedBar.Value);
@@ -79,7 +72,7 @@ namespace WindowsFormsApp1
                 }
                 else
                 {
-                    if(LR)
+                    if (LR)
                     {
                         SendData(true, 32 + speedBar.Value);           //Turn Left
                         SendData(false, 32 + speedBar.Value);
@@ -93,9 +86,9 @@ namespace WindowsFormsApp1
             }
             else
             {
-                if(FBPress)
+                if (FBPress)
                 {
-                    if(FB)
+                    if (FB)
                     {
                         SendData(true, 32 - speedBar.Value);       //Forward Straight
                         SendData(false, 32 + speedBar.Value);
@@ -112,7 +105,8 @@ namespace WindowsFormsApp1
                     SendData(false, 32);
                 }
             }
-            label1.Text = "ADC: " + adc_Value;
+            if (port.BytesToRead >= 1)
+                label1.Text = "ADC: " + port.ReadByte();
         }
         private void SendData(bool dir, int pos)
         {

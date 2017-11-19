@@ -41,7 +41,6 @@
             // port
             // 
             this.port.PortName = "COM4";
-            this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.port_DataReceived);
             // 
             // speedBar
             // 
