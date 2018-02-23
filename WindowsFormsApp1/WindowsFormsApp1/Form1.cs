@@ -106,7 +106,11 @@ namespace WindowsFormsApp1
                 }
             }
             if (port.BytesToRead >= 1)
-                label1.Text = "ADC: " + port.ReadByte();
+            {
+                //label1.Text = "ADC: " + ( (double)port.ReadByte() / 255 *100 )  + " %";
+                label1.Text = string.Format("ADC: {0:0.00} % ", ((double)port.ReadByte() / 255 * 100));
+            }
+                
         }
         private void SendData(bool dir, int pos)
         {
