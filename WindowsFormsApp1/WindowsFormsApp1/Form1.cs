@@ -204,6 +204,7 @@ namespace WindowsFormsApp1
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             port.Close();
+        }
         private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (port.BytesToRead >= 1)
