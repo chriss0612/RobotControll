@@ -104,9 +104,7 @@ namespace WindowsFormsApp1
                     SendData(true, 32);         //Stop
                     SendData(false, 32);
                 }
-            }
-            if (port.BytesToRead >= 1)
-                label1.Text = "ADC: " + port.ReadByte();
+            }   
         }
         private void SendData(bool dir, int pos)
         {
@@ -206,6 +204,13 @@ namespace WindowsFormsApp1
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             port.Close();
+        private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            if (port.BytesToRead >= 1)
+            {
+                //label1.Text = "ADC: " + ( (double)port.ReadByte() / 255 *100 )  + " %";
+                label1.Text = string.Format("ADC: {0:0.00} % ", ((double)port.ReadByte() / 255 * 100));
+            }
         }
     }
 }
