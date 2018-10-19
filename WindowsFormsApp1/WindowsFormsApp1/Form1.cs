@@ -203,5 +203,9 @@ namespace WindowsFormsApp1
             port.Write(b, 0, 1);
         }
 
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            port.Close();
+        }
     }
 }
